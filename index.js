@@ -4,12 +4,12 @@ const mongoose = require("mongoose");
 // Import routes
 const userRoutes = require("./routes/users");
 
-// use userRoutes like a middleware
-app.use("/api/users", userRoutes);
-
 // Config app
 const app = express();
 require("dotenv").config();
+
+// use userRoutes like a middleware
+app.use("/api/users", userRoutes);
 
 /// Use mongoose
 const db = process.env.DATABASE;
