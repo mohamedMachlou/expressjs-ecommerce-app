@@ -1,5 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
+
+// Import routes
+const userRoutes = require("./routes/users");
+
+// use userRoutes like a middleware
+app.use("/api/users", userRoutes);
+
+// Config app
 const app = express();
 require("dotenv").config();
 
@@ -13,13 +21,6 @@ mongoose
   .catch(() => {
     console.log("database not  connect");
   });
-
-///////////////////////////////////////////////////
-////////   Get Mathod  ////////////////////////////
-///////////////////////////////////////////////////
-app.get("/", (req, res) => {
-  res.send({ message: "Working good ...." });
-});
 
 ///////////////////////////////////////////////////
 ////////   Port and Listen     ////////////////////
