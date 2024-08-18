@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
-const uuid = require("uuid/v1");
+const uuid = require("uuid").v1;
 const crypto = require("crypto");
+
+const { createHmac } = require("node:crypto");
 
 const userSchema = new mongoose.Schema(
   {
@@ -10,9 +12,17 @@ const userSchema = new mongoose.Schema(
       maxLength: 50,
       required: true,
     },
+    email: {
+      type: String,
+      trim: true,
+      maxLength: 70,
+      // required: true,
+      // default: "med@gmail.fr",
+    },
     hashed_password: {
       type: String,
-      required: true,
+      // required: true,
+      // default: "Aicha",
     },
     salt: {
       type: String,
@@ -20,6 +30,7 @@ const userSchema = new mongoose.Schema(
     about: {
       type: String,
       trim: true,
+      default: "",
     },
     role: {
       type: Number,
@@ -34,14 +45,14 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema
-  .virtual("passwors")
-  .set(function () {
+  .virtual("password")
+  .set(function (password) {
     this._password = password;
     this.salt = uuid();
     this.hashed_password = this.cryptPassword(password);
   })
   .get(function () {
-    return this._password;
+    return this.hashed_password;
   });
 
 userSchema.methods = {

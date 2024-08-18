@@ -8,10 +8,11 @@ const userRoutes = require("./routes/users");
 const app = express();
 require("dotenv").config();
 
+// Middlewares
+app.use(express.json());
+
 // use userRoutes like a middleware
 app.use("/api/users", userRoutes);
-
-app.use(express.json());
 
 /// Use mongoose
 const db = process.env.DATABASE;
