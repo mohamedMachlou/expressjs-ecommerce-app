@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
-const uuid = require("uuid").v1;
+/// 1 way to use uuid
+// const uuid = require("uuid").v1;
+/// 2 way to use uuid
+const { v1: uuid } = require("uuid");
 const crypto = require("crypto");
-
-const { createHmac } = require("node:crypto");
 
 const userSchema = new mongoose.Schema(
   {
@@ -16,12 +17,13 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
       maxLength: 70,
-      // required: true,
+      required: true,
+      unique: true,
       // default: "med@gmail.fr",
     },
     hashed_password: {
       type: String,
-      // required: true,
+      required: true,
       // default: "Aicha",
     },
     salt: {

@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+// const expressValidator = require("express-validator");
 
 // Import routes
 const userRoutes = require("./routes/users");
@@ -10,6 +11,7 @@ require("dotenv").config();
 
 // Middlewares
 app.use(express.json());
+// app.use(expressValidator);
 
 // use userRoutes like a middleware
 app.use("/api/users", userRoutes);
