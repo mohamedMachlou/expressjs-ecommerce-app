@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 // const expressValidator = require("express-validator");
+const cookieParser = require("cookie-parser");
 
 // Import routes
 const userRoutes = require("./routes/users");
@@ -15,6 +16,7 @@ app.use(express.json());
 
 // use userRoutes like a middleware
 app.use("/api/users", userRoutes);
+app.use(cookieParser());
 
 /// Use mongoose
 const db = process.env.DATABASE;

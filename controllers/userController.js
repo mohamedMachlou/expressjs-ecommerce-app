@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const jwt = require("jsonwebtoken");
 
 exports.salam = (req, res) => {
   res.send({ message: "This is a users module" });
@@ -14,47 +15,53 @@ exports.signup = (req, res) => {
     .catch((err) => res.send(err.message));
 };
 
-// const User = require("../models/user");
+exports.signin = (req, res) => {
+  const { email, password } = req.body;
+  // Check if there any user with same email...
+  User.findOne({ email: email })
+    .then((user) => {
+      // if (user) {
+      //   return res.status(200).json({
+      //     message: `A user with this email already exist... ${user}`,
+      //   });
+      // }
+      if (!user.authenticate(password)) {
+        console.log("machlou test !!!");
+        res.status(401).json({
+          error: `Email or Password dont Match ${password}`,
+        });
+      }
 
-// exports.signup = (req, res) => {
-//   // Create a new user instance with the request body
-//   const user = new User(req.body);
+      //// JWT
 
-//   // Save the user to the database
-//   user
-//     .save()
-//     .then(() => {
-//       res.status(201).send({
-//         message: "User created successfully",
-//         user: {
-//           name: user.name,
-//           email: user.email,
-//         },
-//       });
-//     })
-//     .catch((err) => {
-//       // Handle validation errors
-//       if (err.name === "ValidationError") {
-//         const messages = Object.values(err.errors).map(
-//           (error) => error.message
-//         );
-//         return res.status(400).send({
-//           message: "Validation failed",
-//           errors: messages,
-//         });
-//       }
+      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+      res.cookie("token", token, { expire: new Date() + 65543445 });
+      const { _id, email, name, role } = user;
+      return res.json({
+        token,
+        user: { _id, email, name, role },
+      });
+    })
+    .catch((err) => {
+      return res.status(400).json({
+        error: `"User not found with this email, Please SignUp !`,
+      });
+    });
 
-//       // Handle duplicate email error
-//       if (err.code === 11000) {
-//         return res.status(400).send({
-//           message: "Email already in use",
-//         });
-//       }
-
-//       // Handle any other errors
-//       res.status(500).send({
-//         message: "An error occurred while creating the user",
-//         error: err.message,
-//       });
-//     });
-// };
+  // const { email, password } = req.body;
+  // User.findOne({ email }, (err, user) => {
+  //
+  //   if (!user.authenticate(password)) {
+  //     res.status(401).json({
+  //       error: "Email or Password dont Match",
+  //     });
+  //   }
+  //   const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+  //   res.cookie("token", token, { expire: new Date() + 65543445 });
+  //   const { _id, email, name, role } = user;
+  //  return res.json({
+  //     token,
+  //     user: { _id, email, name, role },
+  //   });
+  // });
+};
