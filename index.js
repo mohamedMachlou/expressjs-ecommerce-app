@@ -4,19 +4,21 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 
 // Import routes
+const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
 
 // Config app
-const app = express();
 require("dotenv").config();
+const app = express();
 
 // Middlewares
 app.use(express.json());
 // app.use(expressValidator);
 
 // use userRoutes like a middleware
-app.use("/api/users", userRoutes);
+app.use("/api", authRoutes);
 app.use(cookieParser());
+app.use("/api", userRoutes);
 
 /// Use mongoose
 const db = process.env.DATABASE;
