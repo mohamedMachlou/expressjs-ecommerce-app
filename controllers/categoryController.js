@@ -9,7 +9,7 @@ exports.createCategory = (req, res) => {
     })
     .catch((err) => {
       return res.status(400).json({
-        error: "bad request",
+        error: "bad request, your category has not yet registred !!!",
       });
     });
 };

@@ -8,15 +8,11 @@ exports.requireSignIn = expressJWT({
 });
 
 exports.isAuth = (req, res, next) => {
-  if (req.auth.role == 1) {
-    return next();
-  }
-
   let user = req.profile && req.auth && req.profile._id == req.auth._id;
 
   if (!user) {
     res.status(403).json({
-      error: "Access Denied",
+      error: "Access Denied from isAuth",
     });
   }
   next();
