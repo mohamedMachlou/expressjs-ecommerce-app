@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
 const categoryRoutes = require("./routes/categoriesRoutes");
+const productsRoutes = require("./routes/products");
 
 // Config app
 require("dotenv").config();
@@ -21,6 +22,7 @@ app.use("/api", authRoutes);
 app.use(cookieParser());
 app.use("/api", userRoutes);
 app.use("/api/category", categoryRoutes);
+app.use("/api/product", productsRoutes);
 
 /// Use mongoose
 const db = process.env.DATABASE;
