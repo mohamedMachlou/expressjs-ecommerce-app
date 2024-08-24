@@ -1,3 +1,4 @@
+const { required } = require("joi");
 const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
 
@@ -16,9 +17,11 @@ const productSchema = new mongoose.Schema(
     },
     price: {
       type: Number,
+      required: true,
     },
     quantity: {
       type: Number,
+      required: true,
     },
     category: {
       type: ObjectId,
@@ -27,7 +30,6 @@ const productSchema = new mongoose.Schema(
     },
     shipping: {
       type: Boolean,
-      required: false,
       default: false,
     },
     photo: {
