@@ -1,7 +1,6 @@
 const Product = require("../models/product");
 
 exports.getProductById = (req, res, next, id) => {
-  Product.deleteOne();
   Product.findById(id)
     .then((product) => {
       if (!product) {

@@ -152,3 +152,81 @@ exports.showProductById = (req, res) => {
 ///////////////////////////////////////////////////////////////////////
 ///////// End  Get Product              ///////////////////////////////
 ///////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////
+///////// Start Delete Product              ///////////////////////////
+///////////////////////////////////////////////////////////////////////
+exports.removeProduct = (req, res) => {
+  let product = req.product;
+  product
+    .deleteOne()
+    .then(() => res.json({ message: "Product Deleted !!! " }))
+    .catch((err) =>
+      res.json({
+        error: "Product Not Deleted !!! ",
+      })
+    );
+};
+///////////////////////////////////////////////////////////////////////
+///////// End Delete Product                ///////////////////////////
+///////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////
+///////// Start Update Product              ///////////////////////////
+///////////////////////////////////////////////////////////////////////
+exports.updateProduct = (req, res) => {
+  let product = req.product;
+
+  let form = new formidable.IncomingForm();
+
+  form.keepExtensions = true; // Preserve file extensions
+
+  form.parse(req, (err, fields, files) => {
+    if (err) {
+      return res.status(400).json({
+        error: "Image could not be uploaded!",
+      });
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // Convert fields
+    const convertedFields = {};
+    for (let key in fields) {
+      if (Array.isArray(fields[key])) {
+        convertedFields[key] = fields[key][0];
+      } else {
+        convertedFields[key] = fields[key];
+      }
+    }
+
+    (product.name = convertedFields.name),
+      (product.description = convertedFields.description),
+      (product.quantity = convertedFields.quantity),
+      (product.price = convertedFields.price);
+
+    // console.log("update is ok");
+    // res.json({
+    //   myProduct: product,
+    //   myFields: convertedFields,
+    // });
+  });
+
+  // Saving the product to the database
+  product
+    .save()
+    .then(() =>
+      res.json({
+        message: "Product saved Successfully !!",
+        product,
+      })
+    )
+    .catch((err) => {
+      res.status(400).json({
+        error: "Product could not be saved!",
+        product,
+      });
+    });
+};
+
+///////////////////////////////////////////////////////////////////////
+///////// End Update Product                ///////////////////////////
+///////////////////////////////////////////////////////////////////////
